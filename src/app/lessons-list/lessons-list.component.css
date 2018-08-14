@@ -3,3 +3,7 @@ table{
     margin: 0 auto 30px auto;
     padding: 0 10px;
 }
+
+.lesson-viewed{
+    background: #c5bebe;
+}

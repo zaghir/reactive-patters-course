@@ -2,8 +2,14 @@
   <tbody>
     <tr *ngFor="let lesson of lessons">
       <td>
-        <i class="icon duration">access_time</i>
-        <span>{{lesson.duration}}</span>
+        <input type="checkbox" (click)="toggleLessonView(lesson)">
+      </td>
+      <td [ngClass]="{'lesson-viewed':lesson.completed  }">
+          <span>{{lesson.description}} {{lesson.duration}} </span>
+      </td>
+      <td>
+        <!-- <i class="icon">&#43;</i>  -->
+        <button class="btn btn-danger" (click)="delete(lesson)">X</button>        
       </td>
     </tr>
   </tbody>
