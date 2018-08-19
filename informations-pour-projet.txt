@@ -1,0 +1,39 @@
+﻿projet :  my-first-app-angular-five
+
+installer angular
+    npm install -g @angular/cli
+creer un nouveau projet
+    ng new nom-projet     il ne faut pas metre des chiffre
+
+installation de npm
+    npm install npm@latest -g
+
+insaller bootstrap css
+    npm install --save bootstrap    --save pour declarer la dependance dans le fichier config.json
+
+creation de component avec cli
+    ng generate component nom_component
+    ng g c nom_component
+    ng g c nom_component --spec false     --spec false pour dire qu on a pas besoin de test unitaire
+    ng generate component recipes --spec false                  creation de component recipes
+    ng generate component recipes/recipe-list --spec false      dans le component recipes on créé un sous component recipe-list
+    ng generate component recipes/recipe-detail --spec false    dans le component recipes on créé un sous component recipe-detail
+    ng generate component recipes/recipe-list/recipe-item --spec false
+    ng g c cockpit --spec false
+    ng g c server-element --spec false
+
+installer l'extention Augury  pour debug
+    il est possible de voir les source directement dans chrome par F12 et dans --> source --> le dossier webpack --> . --> src
+    le code generer dans l'environement de DEV  genere aussi les fichiers .map pour .css et .ts permet de faire des point d'arret sur le sources .ts et scss
+
+
+racourcis Visual code
+---> cmd + p  chercher un fichier 
+---> fichier -> préférences -> thémes icons des fichiers --> sans
+---> ctrl+k , suivie de ctrl+c  mettre en commentaire  , la meme manipulation pour decommenté , il y a aussi shift+alt+a  
+---> ctrl + shift + f  rechercher le mot clé dans tous les fichiers 
+---> ctrl + shift + p  revenir à l'explorateur de projet
+---> afficher -> terminal intégré    afficher la console   , sur le button plus changé vers git bash hhhh
+---> On Windows Shift + Alt + F    code formatting
+---> On Mac Shift + Option + F    code formatting
+---> On Ubuntu Ctrl + Shift + I    code formatting

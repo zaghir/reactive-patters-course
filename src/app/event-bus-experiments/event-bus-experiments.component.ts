@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { initializeLessonsList } from './event-bus';
+import { store } from './event-bus';
 import { testLessons } from '../shared/model/test-lessons';
 import { Lesson } from '../shared/model/lesson';
 
@@ -16,7 +16,7 @@ export class EventBusExperimentsComponent implements OnInit {
   ngOnInit() {
     console.log('EventBusExperimentsComponent onInit()  broadcasted all lessons ')
     // initialiser la liste des lessons qui sera envoye a chaque observer qui est enregistré
-    initializeLessonsList(testLessons.slice(0));
+    store.initializeLessonsList(testLessons.slice(0));
     
     //simulation d' un appel ascyncrone 
     setTimeout(()=>{      

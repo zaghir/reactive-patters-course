@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { lessonListObservable, Observer } from '../event-bus-experiments/event-bus';
+import { store, Observer } from '../event-bus-experiments/event-bus';
 import { Lesson } from '../shared/model/lesson';
 
 @Component({
@@ -19,7 +19,7 @@ export class LessonsListComponent implements Observer, OnInit {
      // et on perd les notifications de l'observable
      // Donc subscribe se fait soit dans le ngOnInit ou dans le constructor 
      console.log('lessonsListComponent ==> onInit observer is registered as an observer...');
-     lessonListObservable.subscribe(this);  
+     store.lessonListObservable.subscribe(this);  
       // cette nouvelle aproche permert d'etre notifier pas l'observable avec la methode next 
      // les observables partage la meme source de données ici le table data en parametre  
   }

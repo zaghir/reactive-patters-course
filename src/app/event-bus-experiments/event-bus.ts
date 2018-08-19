@@ -54,33 +54,40 @@ class SubjectImplementation implements Subject{
     }
 }
 
-// private
-const lessonsListSubject = new SubjectImplementation();
 
-// public export
-// je cree mon Observable , t j'ulise l implemenation de subject pour subscribe et unsubscribe
-// lessonsListSubject contient tous les observer 
-export let lessonListObservable: Observable ={
-    subscribe: obs => {
-        lessonsListSubject.subscribe(obs);
-        // si un observer est inscrit on lui envoie des notifications avec les lessons
-        // pour que sa liste ne soit pas vide, il resoit qu'il y a comme information deja pousser par les autres observers        
-        // lessons c'est notre liste partagé par les observer
-        obs.next(lessons); 
-        console.log('lessonListObservable subscribe()' , lessons);
-    } ,
-    unsubscribe: obs => lessonsListSubject.unsubscribe(obs)
+// on factorise tous les variables dans un seul endroit , c'est le pattern factory
+class DataStore {
+    // on centralise les données des lessons  et on les suprime des autres classes 
+    private lessons: Lesson[] = [];
+    // private
+    private  lessonsListSubject = new SubjectImplementation();
 
-} ;
+    // la prorité Observable utilisé pas les observer
+    // public export
+    // je cree mon Observable , t j'ulise l implemenation de subject pour subscribe et unsubscribe
+    // lessonsListSubject contient tous les observer 
+    public lessonListObservable: Observable ={
+        subscribe: obs => {
+            this.lessonsListSubject.subscribe(obs);
+            // si un observer est inscrit on lui envoie des notifications avec les lessons
+            // pour que sa liste ne soit pas vide, il resoit qu'il y a comme information deja pousser par les autres observers        
+            // lessons c'est notre liste partagé par les observer
+            obs.next(this.lessons); 
+            console.log('lessonListObservable subscribe()' , this.lessons);
+        } ,
+        unsubscribe: obs => this.lessonsListSubject.unsubscribe(obs)
+    
+    } ;
 
-// on centralise les données des lessons  et on les suprime des autres classes 
-let lessons: Lesson[] = [];
-
-export function initializeLessonsList(newLessons:Lesson[]){
-    // pour ne pas passer des reference à la liste lessons et modifier par des mutateur 
-    // on cree une copie et en set avec les lessons par newLessons 
-    lessons = newLessons.slice(0);
-    // notifier tous les observer 
-    lessonsListSubject.next(lessons);
-    console.log('initializeLessonsList ==> ' , newLessons)
+    public initializeLessonsList(newLessons:Lesson[]){
+        // pour ne pas passer des reference à la liste lessons et modifier par des mutateur 
+        // on cree une copie et en set avec les lessons par newLessons 
+        this.lessons = newLessons.slice(0);
+        // notifier tous les observer 
+        this.lessonsListSubject.next(this.lessons);
+        console.log('initializeLessonsList ==> ' , newLessons)
+    }
 }
+
+// toutes le varibles sont private a part store avec l observable
+export const store = new DataStore();
