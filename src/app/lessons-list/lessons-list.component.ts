@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { globalEventBus, Observer, LESSONS_LIST_AVAILABLE, ADD_NEW_LESSON } from '../event-bus-experiments/event-bus';
+import { lessonListObservable, Observer } from '../event-bus-experiments/event-bus';
 import { Lesson } from '../shared/model/lesson';
 
 @Component({
@@ -7,29 +7,25 @@ import { Lesson } from '../shared/model/lesson';
   templateUrl: './lessons-list.component.html',
   styleUrls: ['./lessons-list.component.css']
 })
-export class LessonsListComponent implements OnInit , Observer {
+export class LessonsListComponent implements Observer, OnInit {
+ 
 
   lessons: Lesson[] = [];
 
-  constructor() {
-     // on transforme notre class a un observer avec l'implementation de Oserver et le redefinition de la methode notify
+
+   ngOnInit(): void {
+     // par rapport à l encienne methode on peut s'inscrire dans la methode ngOnInit sans passer par le construtor
+     // car au debut on avait le probleme de scyncronisation on s'inscrit avant de finir la contrcution dans la page
+     // et on perd les notifications de l'observable
+     // Donc subscribe se fait soit dans le ngOnInit ou dans le constructor 
      console.log('lessonsListComponent ==> onInit observer is registered as an observer...');
-     // ecouter l'evenement LESSONS_LIST_AVAILABLE
-     globalEventBus.resisterObserver(LESSONS_LIST_AVAILABLE,this);
-     // on peut avoir un problème de synco, du au observable => globalEventBus est initialisé dans le ngInit
-     // qu' au la page est créé et fini ,on met le code dans le constructeur on s'enregistre et on attend les notifications 
-     globalEventBus.resisterObserver(ADD_NEW_LESSON , {
-       notify : lessonText =>{
-         this.lessons.push({
-           id:Math.random(),
-           description: lessonText
-         });
-       }
-     });
+     lessonListObservable.subscribe(this);  
+      // cette nouvelle aproche permert d'etre notifier pas l'observable avec la methode next 
+     // les observables partage la meme source de données ici le table data en parametre  
+  }
 
-   }
 
-  notify(data :Lesson[]){
+  next(data :Lesson[]){
     console.log('lessonsListComponent ==> notify() received data ', data);
     // on utilise data.slice(0)  pour recupere une copie de table apres la notification 
     // si on set lessons par date , lessons aurra une reference directe sur le tableau
@@ -46,10 +42,5 @@ export class LessonsListComponent implements OnInit , Observer {
     const index = this.lessons.indexOf(lesson);
     this.lessons.splice(index,1);
   }
-
-  ngOnInit() {
-   
-  }
-  
 
 }

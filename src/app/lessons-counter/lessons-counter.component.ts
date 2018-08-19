@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { globalEventBus, Observer, LESSONS_LIST_AVAILABLE, ADD_NEW_LESSON } from '../event-bus-experiments/event-bus';
+import { lessonListObservable, Observer} from '../event-bus-experiments/event-bus';
 import { Lesson } from '../shared/model/lesson';
 
 @Component({
@@ -7,20 +7,15 @@ import { Lesson } from '../shared/model/lesson';
   templateUrl: './lessons-counter.component.html',
   styleUrls: ['./lessons-counter.component.css']
 })
-export class LessonsCounterComponent implements OnInit , Observer {
+export class LessonsCounterComponent implements Observer {
 
   lessonsCounter: number = 0;
   constructor() {
     console.log('LessonsCounterComponent is regestred as observer...');
-    globalEventBus.resisterObserver(LESSONS_LIST_AVAILABLE, this);
-
-    globalEventBus.resisterObserver(ADD_NEW_LESSON, {notify:lessonText => this.lessonsCounter +=1});
+    lessonListObservable.subscribe(this);
    }
 
-  ngOnInit() {
-  }
-
-  notify(data: Lesson[]){
+  next(data: Lesson[]){
     this.lessonsCounter = data.length ;
   }
 
