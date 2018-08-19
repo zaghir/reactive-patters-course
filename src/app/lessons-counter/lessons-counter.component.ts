@@ -21,7 +21,7 @@ export class LessonsCounterComponent implements Observer, OnInit {
   // }
   ngOnInit(): void {
     console.log('LessonsCounterComponent is regestred as observer...');
-    store.lessonListObservable.subscribe(this);
+    store.subscribe(this);
   }
 
   next(data: Lesson[]){

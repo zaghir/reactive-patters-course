@@ -3,8 +3,8 @@ import { JsonPipe } from "../../../node_modules/@angular/common";
 
 
 // definier deux type d'evenement
-export const LESSONS_LIST_AVAILABLE = 'NEW_LIST_EVENT';
-export const ADD_NEW_LESSON = 'ADD_NEW_LESSON';
+// export const LESSONS_LIST_AVAILABLE = 'NEW_LIST_EVENT';
+// export const ADD_NEW_LESSON = 'ADD_NEW_LESSON';
 
 // implementation du pattern oberver
 export interface Observer{
@@ -57,29 +57,26 @@ class SubjectImplementation implements Subject{
 
 
 // on factorise tous les variables dans un seul endroit , c'est le pattern factory
-class DataStore {
+class DataStore implements Observable {
+    
       // on centralise les données des lessons  et on les suprime des autres classes 
     private lessons: Lesson[] = [];
     // private
     private  lessonsListSubject = new SubjectImplementation();
 
-    // la prorité Observable utilisé pas les observer
-    // public export
-    // je cree mon Observable , t j'ulise l implemenation de subject pour subscribe et unsubscribe
-    // lessonsListSubject contient tous les observer 
-    public lessonListObservable: Observable ={
-        subscribe: obs => {
-            this.lessonsListSubject.subscribe(obs);
-            // si un observer est inscrit on lui envoie des notifications avec les lessons
-            // pour que sa liste ne soit pas vide, il resoit qu'il y a comme information deja pousser par les autres observers        
-            // lessons c'est notre liste partagé par les observer
-            obs.next(this.lessons); 
-            console.log('lessonListObservable subscribe()' , this.lessons);
-        } ,
-        unsubscribe: obs => this.lessonsListSubject.unsubscribe(obs)
+    subscribe(obs: Observer) {
+        this.lessonsListSubject.subscribe(obs);
+        // si un observer est inscrit on lui envoie des notifications avec les lessons
+        // pour que sa liste ne soit pas vide, il resoit qu'il y a comme information deja pousser par les autres observers        
+        // lessons c'est notre liste partagé par les observer
+        obs.next(this.lessons); 
+        console.log('lessonListObservable subscribe()' , this.lessons);
+        
+    }
+    unsubscribe(obs: Observer) {
+        this.lessonsListSubject.unsubscribe(obs);
+    }
     
-    } ;
-
     public initializeLessonsList(newLessons:Lesson[]){
         // pour ne pas passer des reference à la liste lessons et modifier par des mutateur 
         // on cree une copie et en set avec les lessons par newLessons 
