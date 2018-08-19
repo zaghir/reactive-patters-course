@@ -30,17 +30,17 @@ export class LessonsListComponent implements Observer, OnInit {
     // on utilise data.slice(0)  pour recupere une copie de table apres la notification 
     // si on set lessons par date , lessons aurra une reference directe sur le tableau
     // chaque modifications dans un observer va impacter les données d'autres observer pour le meme listner 
-     this.lessons = data.slice(0);
+    // on recupere dans notre cas une copie de data pas besoin de faire un slice 
+    console.log("lessons-list => next --> data" , data)
+     this.lessons = data;
   }
 
   toggleLessonView(lesson: Lesson){
-    console.log('toggleLessonView ...' , lesson);
-    lesson.completed = !lesson.completed;
+    store.toggleLessonView(lesson);    
   }
 
   delete(lesson: Lesson){
-    const index = this.lessons.indexOf(lesson);
-    this.lessons.splice(index,1);
+    store.deleteLesson(lesson);
   }
 
 }

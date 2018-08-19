@@ -24,12 +24,16 @@ export class EventBusExperimentsComponent implements OnInit {
         id:Math.random(),
         description:'My lesson from a Rest service !'
       };
-      //todo
+      store.addLesson(newLesson);
     },5000)
   }
 
   addLesson(lessonText: string ){
-    // toDO
+    const newLesson = {
+      id :Math.random(),
+      description: lessonText
+    };
+    store.addLesson(newLesson);    
   }
 
 }

@@ -1,4 +1,5 @@
 import {Lesson } from "../shared/model/lesson";
+import { JsonPipe } from "../../../node_modules/@angular/common";
 
 
 // definier deux type d'evenement
@@ -57,7 +58,7 @@ class SubjectImplementation implements Subject{
 
 // on factorise tous les variables dans un seul endroit , c'est le pattern factory
 class DataStore {
-    // on centralise les données des lessons  et on les suprime des autres classes 
+      // on centralise les données des lessons  et on les suprime des autres classes 
     private lessons: Lesson[] = [];
     // private
     private  lessonsListSubject = new SubjectImplementation();
@@ -84,8 +85,49 @@ class DataStore {
         // on cree une copie et en set avec les lessons par newLessons 
         this.lessons = newLessons.slice(0);
         // notifier tous les observer 
-        this.lessonsListSubject.next(this.lessons);
+        this.broadcast();  
         console.log('initializeLessonsList ==> ' , newLessons)
+    }
+
+    public addLesson(newLesson: Lesson): any {
+        // on clone l'objet puis en l'ajout à la table
+        // si on clone pas l'objet d'autre observer peuvent modifier les objet ajouter 
+        // car le tableau a toujour la reference d aubjet passé
+
+        this.lessons.push(this.cloneObject(newLesson));              
+        this.broadcast();        
+    }
+
+    toggleLessonView(toggele: Lesson){
+        console.log('toggleLessonView ...' , toggele);
+        let lessonToggle :Lesson;
+        for(let i: number =0 ; i< this.lessons.length ; i++){
+            if(this.lessons[i].id === toggele.id){
+                lessonToggle = this.lessons[i];
+                break;
+            }
+        }
+        lessonToggle.completed = !lessonToggle.completed;
+        this.broadcast();
+    }
+    
+    deleteLesson(lesson: Lesson){        
+        const index = this.lessons.indexOf(lesson);
+        this.lessons.splice(index,1);
+        this.broadcast();
+    }
+
+    public broadcast(){
+         // la methode next envoie la referece de la liste lessons , qui cause problemes d'affichages avec le binding Angular
+        // si un oberver affiche la list il applique les changement fait localement sur les object de la liste recuprere 
+        //this.lessonsListSubject.next(this.lessons);
+        // on envoie un clone ou une copie de la liste car il ne faut pas quelle soit mutable  
+        this.lessonsListSubject.next(this.cloneObject(this.lessons));        
+    }
+
+    private cloneObject(objet:any): any{
+        console.log(JSON.parse(JSON.stringify(objet)));
+        return JSON.parse(JSON.stringify(objet));
     }
 }
 
