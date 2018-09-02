@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { store, Observer } from '../event-bus-experiments/event-bus';
+import { store } from '../event-bus-experiments/event-bus';
 import { Lesson } from '../shared/model/lesson';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'lessons-list',
   templateUrl: './lessons-list.component.html',
   styleUrls: ['./lessons-list.component.css']
 })
-export class LessonsListComponent implements Observer, OnInit {
+export class LessonsListComponent implements Observer<Lesson[]>, OnInit {
  
 
   lessons: Lesson[] = [];
@@ -19,7 +20,7 @@ export class LessonsListComponent implements Observer, OnInit {
      // et on perd les notifications de l'observable
      // Donc subscribe se fait soit dans le ngOnInit ou dans le constructor 
      console.log('lessonsListComponent ==> onInit observer is registered as an observer...');
-     store.subscribe(this);  
+     store.lessonListObservable.subscribe(this);  
       // cette nouvelle aproche permert d'etre notifier pas l'observable avec la methode next 
      // les observables partage la meme source de données ici le table data en parametre  
   }
@@ -33,6 +34,14 @@ export class LessonsListComponent implements Observer, OnInit {
     // on recupere dans notre cas une copie de data pas besoin de faire un slice 
     console.log("lessons-list => next --> data" , data)
      this.lessons = data;
+  }
+
+  error(error){
+    console.log("browser event error ", error);
+  }
+
+  complete(){
+    console.log("browser event complet ");
   }
 
   toggleLessonView(lesson: Lesson){

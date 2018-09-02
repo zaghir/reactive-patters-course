@@ -1,5 +1,6 @@
 <table class="table table-active">
   <tbody>
+    {{lessons.length}}
     <tr *ngFor="let lesson of lessons">
       <td>
         <input type="checkbox" [checked]="lesson.completed"  (click)="toggleLessonView(lesson)">
